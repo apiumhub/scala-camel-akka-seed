@@ -20,6 +20,8 @@ trait MonadTest {
         Await.result(a, 1 second)
       }
     }
+
+    def monadic(a: => { def get: Unit }): Unit = a.get
 }
 
 trait SynchronousFutureTest {

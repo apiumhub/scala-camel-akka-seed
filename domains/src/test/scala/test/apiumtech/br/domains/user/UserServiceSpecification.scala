@@ -17,7 +17,11 @@ trait UserServiceSpecification extends FlatSpec with Matchers with MonadTest {
   def service: UserService
 
   "A UserService" should "find a user by name" in {
-    service.user("name").map(_.name should equal("name")).get
+    monadic {
+      for (
+        dto <- service.user("name")
+      ) yield dto.name should equal("name")
+    }
   }
 }
 
