@@ -1,19 +1,26 @@
 package test.apiumtech.br.domains.user
 
-import com.apiumtech.br.domains.user.UserService
+import com.apiumtech.br.domains.user.{MockUserRepository, UserRepository, DefaultUserService, UserService}
+import org.scalatest.concurrent.Eventually
 import org.scalatest.{FlatSpec, Matchers}
+import test.apiumtech.commons.{SynchronousFutureTest, MonadTest}
 
-import scala.concurrent.Await
+import scala.concurrent.{Future, ExecutionContext, Await}
 import scala.concurrent.duration._
+import scala.util.{Success, Failure, Try}
 
 /**
  * @author kevin 
  * @since 7/16/15.
  */
-case class UserServiceSpecification() extends FlatSpec with Matchers {
-  def service = UserService()
+trait UserServiceSpecification extends FlatSpec with Matchers with MonadTest {
+  def service: UserService
 
   "A UserService" should "find a user by name" in {
-    Await.result(service.user("name"), 500 milliseconds).name should equal ("name")
+    service.user("name").map(_.name should equal("name")).get
   }
+}
+
+case class DefaultUserServiceSpecification() extends UserServiceSpecification with SynchronousFutureTest {
+  def service = UserService(MockUserRepository())
 }

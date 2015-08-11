@@ -12,7 +12,7 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
  * @since 7/17/15.
  */
 
-case class UserActorServiceSpecification() extends TestKit(ActorSystem(getClass.getName)) with ImplicitSender with WordSpecLike with Matchers with BeforeAndAfterAll {
+case class UserActorServiceSpecification() extends TestKit(ActorSystem("UserActorServiceTestKit")) with ImplicitSender with WordSpecLike with Matchers with BeforeAndAfterAll {
   import UserActorService._
 
   override def afterAll = TestKit.shutdownActorSystem(system)
